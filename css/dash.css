@@ -12,7 +12,7 @@
 
 body {
   font-family: "Roboto", sans-serif;
-  background-color: #ccc;
+  background-color: #cfcfd0;
 }
 
 ul {
@@ -31,7 +31,7 @@ a {
 }
 
 button {
-  box-shadow: 0 3px 7px #555;
+  box-shadow: 0 2px 5px #555;
   border: none;
   border-radius: 50px;
   background-image: linear-gradient(to top left, #e91e63, #e95943, #da8334, #c5a543, #afc16a, #b3bf71, #b6be79, #b8bc80, #c1a273, #be8a74, #ad7779, #92697c);
@@ -103,7 +103,7 @@ aside ul li a {
 }
 
 aside ul li i {
-  font-size: 1.2em;
+  font-size: 1.4em;
   margin-right: 20px;
 }
 
@@ -114,7 +114,7 @@ main {
 }
 main nav {
   padding: 20px;
-  background-image: linear-gradient(to left top, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #ffffff, #e5e3e9, #e5e3e9, #cfc6d3, #bbaabb, #da8334, #ca4975, #ca4975);
+  background: white;
 }
 main nav .search {
   display: flex;
@@ -135,7 +135,7 @@ main nav .search input {
   height: 40px;
   padding: 15px;
   caret-color: var(--colorA);
-  box-shadow: 0 2px 5px #444;
+  box-shadow: 0 2px 5px #444 inset;
 }
 main nav .search .bell {
   display: flex;
@@ -170,6 +170,7 @@ main nav .user {
   main nav .user {
     flex-wrap: wrap;
     text-align: center;
+    padding: 10px 0;
   }
 }
 main nav .user img {
@@ -204,11 +205,13 @@ main nav .btns {
 }
 @media (width < 555px) {
   main nav .btns {
-    flex-wrap: nowrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    display: block;
+    text-align: center;
+  }
+  main nav .btns > * {
+    display: inline-block;
+    padding: 3px 6px;
+    font-size: 0.9rem;
   }
 }
 
@@ -225,38 +228,79 @@ main nav .btns {
   padding: 20px;
   font-size: 1.4rem;
 }
-.content .container {
+.content .books {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin: 0 20px 20px;
 }
-.content .container .box {
+.content .books .box {
   background-color: white;
   padding: 30px 20px;
-  border-left: 5px solid var(--colorC);
+  border-left: 6px solid red;
   border-radius: 6px;
   box-shadow: 0 0 10px 5px #ccc;
   min-height: 250px;
 }
-.content .container .box h3 {
+.content .books .box h3 {
   font-size: 1.1rem;
   margin-bottom: 15px;
 }
-.content .container .box p {
-  font-weight: 300;
-  color: #888;
-  margin-bottom: 20px;
+.content .books .box p {
+  color: #777;
+  margin-bottom: 10px;
   line-height: 1.5;
 }
-.content .container .box .icons {
-  text-align: right;
+.content .books .box .book-read {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  transition: 0.3s;
 }
-.content .container .box .icons i {
+.content .books .box .book-read .geekmark {
+  position: absolute;
+  top: 0;
+  left: 70px;
+  height: 25px;
+  width: 25px;
+  border-radius: 7px;
+  border: 2px solid #555;
+  cursor: pointer;
+}
+.content .books .box .book-read .geekmark::before {
+  display: none;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00c";
+  position: inherit;
+  font-size: 1.5rem;
+  top: -5px;
+  color: var(--colorC);
+  transform: scale(0);
+  transition: 0.3s;
+}
+.content .books .box .book-read input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.content .books .box .book-read input:checked + .geekmark::before {
+  display: block;
+  transform: scale(1);
+}
+.content .books .box .icons {
+  text-align: right;
+  padding-top: 10px;
+}
+.content .books .box .icons i {
   font-size: 1.3rem;
   margin-left: 15px;
   color: #888;
   cursor: pointer;
+}
+.content .books .box .icons i:hover {
+  color: #333;
 }
 
 /* Articles *//*# sourceMappingURL=dash.css.map */
