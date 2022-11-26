@@ -1,9 +1,14 @@
 const books = document.querySelector(".books");
-const newBook = document.querySelector(".new");
+const overlay = document.querySelector(".overlay");
+const newBtn = document.querySelector(".new");
+const addBtn = document.querySelector(".add-btn");
+const form = document.querySelector(".popup form");
 
-let myLibrary = [
+let myLibrary = [];
+
+myLibrary = [
    {
-      title: "book1",
+      title: "book324",
       author: "me",
       pages: 500,
       read: true,
@@ -23,10 +28,17 @@ let myLibrary = [
 ];
 
 function addLocalStorage() {
-   myLibrary = JSON.parse(localStorage.getItem("library"));
-   saveRender();
+   if (
+      localStorage.getItem("library") ||
+      localStorage.getItem("library") != "" ||
+      localStorage.getItem("library") != null
+   ) {
+      myLibrary = JSON.parse(localStorage.getItem("library"));
+      saveRender();
+   }
 }
 addLocalStorage();
+// saveRender();
 
 function createBookElement(el, content, className) {
    const element = document.createElement(el);
@@ -123,4 +135,64 @@ function renderBooks() {
 function saveRender() {
    localStorage.setItem("library", JSON.stringify(myLibrary));
    renderBooks();
+}
+
+// overlay handling
+newBtn.addEventListener("click", () => {
+   overlay.style.transform = "scale(1)";
+   overlay.style.opacity = "1";
+});
+addBtn.addEventListener("click", () => {
+   overlay.style.transform = "translateY(100%)";
+   overlay.style.opacity = "0";
+});
+
+window.addEventListener("click", (e) => {
+   if (e.target.classList.contains("overlay")) {
+      overlay.style.transform = "scale(0)";
+      overlay.style.opacity = "0";
+   }
+});
+
+window.onload = () => {
+   if (books.innerHTML == "") {
+      console.log("empty no boos");
+      books.innerText = "Add New Books ..!";
+   }
+};
+
+/// Add new book
+
+form.addEventListener("submit", makeObj);
+
+function makeObj(e) {
+   e.preventDefault();
+   const myFormData = new FormData(e.target);
+   // https://stackabuse.com/convert-form-data-to-javascript-object/
+   // const formDataObj = Object.fromEntries(myFormData.entries())
+   const formDataObj = {};
+   myFormData.forEach((value, name) => (formDataObj[name] = value));
+   // console.log(formDataObj);
+   if (formDataObj.title == "") return;
+   addBookToLibrary(
+      formDataObj.title,
+      formDataObj.author,
+      formDataObj.pages,
+      false
+   );
+}
+
+class Book {
+   constructor(title, author, pages, read) {
+      this.title = title;
+      this.author = author;
+      this.pages = pages;
+      this.read = read;
+      this.id = Math.floor(Math.random() * 1000);
+   }
+}
+
+function addBookToLibrary(title, author, pages, read) {
+   myLibrary.push(new Book(title, author, pages, read));
+   saveRender();
 }

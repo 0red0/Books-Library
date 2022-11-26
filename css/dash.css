@@ -50,6 +50,66 @@ button:hover {
 /* \\\\== Global ==//// */
 .wrapper {
   display: flex;
+  position: relative;
+  overflow: hidden;
+}
+.wrapper .overlay {
+  transform: scale(0);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.5s;
+  position: absolute;
+  background-color: hsla(40deg, 86%, 58%, 0.671);
+  width: 100%;
+  height: 100%;
+  z-index: 11;
+}
+.wrapper .overlay .popup {
+  background-color: #333;
+  padding: 40px;
+  position: inherit;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-wrap: wrap;
+  width: 500px;
+  box-shadow: 0 3px 20px #000;
+}
+.wrapper .overlay .popup h3 {
+  flex: 1 0 100%;
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.wrapper .overlay .popup .group1,
+.wrapper .overlay .popup .group2 {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+}
+.wrapper .overlay .popup .group1 > *,
+.wrapper .overlay .popup .group2 > * {
+  display: block;
+  margin: 20px 0;
+  width: 100%;
+  line-height: 1.8;
+}
+.wrapper .overlay .popup .group1 {
+  font-weight: bold;
+}
+.wrapper .overlay .popup .group2 > * {
+  border-radius: 10px;
+  outline: none;
+  padding: 0 10px;
+}
+.wrapper .overlay .popup .add-btn {
+  display: block;
+  margin: 5px auto;
 }
 
 /* aside */
@@ -176,6 +236,7 @@ main nav .user {
 main nav .user img {
   width: 100px;
   border-radius: 50%;
+  box-shadow: 0px 5px 10px 0px #00ffde;
 }
 @media (width < 767px) {
   main nav .user img {
