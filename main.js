@@ -2,7 +2,9 @@ const books = document.querySelector(".books");
 const overlay = document.querySelector(".overlay");
 const newBtn = document.querySelector(".new");
 const addBtn = document.querySelector(".add-btn");
+const editBtn = document.querySelector(".edit-btn");
 const form = document.querySelector(".popup form");
+const inputFields = document.querySelectorAll(".popup input");
 
 let myLibrary = [];
 
@@ -118,11 +120,30 @@ function createBookItem(book, index) {
    del.addEventListener("click", () => {
       deleteBook(index);
    });
+   edit.addEventListener("click", () => {
+      editBook(index);
+   });
 }
 
 function deleteBook(index) {
    myLibrary.splice(index, 1);
    saveRender();
+}
+
+function editBook(index) {
+   overlay.style.transform = "scale(1)";
+   overlay.style.opacity = "1";
+   inputFields.forEach((inp) => {
+      if (inp.name == "title") {
+         inp.value = `${myLibrary[index].title}`;
+      }
+      if (inp.name == "author") {
+         inp.value = `${myLibrary[index].author}`;
+      }
+      if (inp.name == "pages") {
+         inp.value = `${myLibrary[index].pages}`;
+      }
+   });
 }
 
 function renderBooks() {
@@ -141,6 +162,7 @@ function saveRender() {
 newBtn.addEventListener("click", () => {
    overlay.style.transform = "scale(1)";
    overlay.style.opacity = "1";
+   // inputFields.forEach((inp) => (inp.value = ""));
 });
 addBtn.addEventListener("click", () => {
    overlay.style.transform = "translateY(100%)";
@@ -172,7 +194,6 @@ function makeObj(e) {
    // const formDataObj = Object.fromEntries(myFormData.entries())
    const formDataObj = {};
    myFormData.forEach((value, name) => (formDataObj[name] = value));
-   // console.log(formDataObj);
    if (formDataObj.title == "") return;
    addBookToLibrary(
       formDataObj.title,
@@ -196,3 +217,9 @@ function addBookToLibrary(title, author, pages, read) {
    myLibrary.push(new Book(title, author, pages, read));
    saveRender();
 }
+
+/// Edit books
+editBtn.addEventListener("click", () => {
+   overlay.style.transform = "translateY(100%)";
+   overlay.style.opacity = "0";
+});
