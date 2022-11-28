@@ -8,26 +8,26 @@ const inputFields = document.querySelectorAll(".popup input");
 
 let myLibrary = [];
 
-myLibrary = [
-   {
-      title: "book324",
-      author: "me",
-      pages: 500,
-      read: true,
-   },
-   {
-      title: "book2",
-      author: "you",
-      pages: 5000,
-      read: false,
-   },
-   {
-      title: "book3",
-      author: "someone",
-      pages: 570,
-      read: true,
-   },
-];
+// myLibrary = [
+//    {
+//       title: "book324",
+//       author: "me",
+//       pages: 500,
+//       read: true,
+//    },
+//    {
+//       title: "book2",
+//       author: "you",
+//       pages: 5000,
+//       read: false,
+//    },
+//    {
+//       title: "book3",
+//       author: "someone",
+//       pages: 570,
+//       read: true,
+//    },
+// ];
 
 function addLocalStorage() {
    if (
@@ -60,15 +60,15 @@ function createReadElement(bookItem, book) {
 
    input.onchange = () => {
       if (input.checked) {
-         bookItem.classList.remove("read-unchecked");
-         bookItem.classList.add("read-checked");
+         // bookItem.classList.remove("read-unchecked");
+         // bookItem.classList.add("read-checked");
          geekmark.classList.toggle("hidden");
 
          book.read = true;
          saveRender();
       } else {
-         bookItem.classList.remove("read-checked");
-         bookItem.classList.add("read-unchecked");
+         // bookItem.classList.remove("read-checked");
+         // bookItem.classList.add("read-unchecked");
          geekmark.classList.toggle("hidden");
 
          book.read = false;
@@ -88,7 +88,7 @@ function createReadElement(bookItem, book) {
 
 function createBookItem(book, index) {
    const bookItem = document.createElement("div");
-   bookItem.setAttribute("id", index);
+   bookItem.setAttribute("id", book.id);
    bookItem.setAttribute("key", index);
    bookItem.setAttribute("class", "card book box");
    bookItem.append(
@@ -133,6 +133,7 @@ function deleteBook(index) {
 function editBook(index) {
    overlay.style.transform = "scale(1)";
    overlay.style.opacity = "1";
+   // console.log(myLibrary[index]);
    inputFields.forEach((inp) => {
       if (inp.name == "title") {
          inp.value = `${myLibrary[index].title}`;
@@ -192,13 +193,23 @@ function makeObj(e) {
    const myFormData = new FormData(e.target);
    // https://stackabuse.com/convert-form-data-to-javascript-object/
    // const formDataObj = Object.fromEntries(myFormData.entries())
-   const formDataObj = {};
+   let formDataObj = {};
    myFormData.forEach((value, name) => (formDataObj[name] = value));
    if (formDataObj.title == "") return;
+   if()
+   formDataObj = new Book(
+      formDataObj.title,
+      formDataObj.author,
+      formDataObj.pages,
+      formDataObj.id
+   );
+   let id = formDataObj.id;
+   formDataObj = myLibrary.filter((b) => b.id === id)[0];
    addBookToLibrary(
       formDataObj.title,
       formDataObj.author,
       formDataObj.pages,
+      formDataObj.id,
       false
    );
 }
@@ -209,12 +220,12 @@ class Book {
       this.author = author;
       this.pages = pages;
       this.read = read;
-      this.id = Math.floor(Math.random() * 1000);
+      this.id = Date.now();
    }
 }
 
-function addBookToLibrary(title, author, pages, read) {
-   myLibrary.push(new Book(title, author, pages, read));
+function addBookToLibrary(title, author, pages, read, id) {
+   myLibrary.push(new Book(title, author, pages, read, id));
    saveRender();
 }
 
