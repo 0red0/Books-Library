@@ -9,13 +9,14 @@ const inputFields = document.querySelectorAll(".popup input");
 let myLibrary = [];
 
 function addLocalStorage() {
-   if (
-      localStorage.getItem("library") ||
-      localStorage.getItem("library") != "" ||
-      localStorage.getItem("library") != null
-   ) {
+   let check1 = localStorage.getItem("library");
+   if (check1 == "null" || check1 == "" || check1 == []) {
+      books.innerText = "Add New Book ..!";
+      // console.log("check1");
+   } else {
       myLibrary = JSON.parse(localStorage.getItem("library"));
       saveRender();
+      // console.log("check2");
    }
 }
 addLocalStorage();
@@ -118,7 +119,6 @@ function editBook(book, index) {
          inp.value = `${myLibrary[index].pages}`;
       }
    });
-   console.log(book);
    form.id = book.id;
 }
 
@@ -154,7 +154,6 @@ window.addEventListener("click", (e) => {
 
 window.onload = () => {
    if (books.innerHTML == "") {
-      // console.log("empty no boos");
       books.innerText = "Add New Books ..!";
    }
 };
@@ -224,6 +223,5 @@ function updateBook() {
    book.title = newTitle;
    book.author = newAuthor;
    book.pages = newPages;
-   console.log(myLibrary);
    saveRender();
 }
