@@ -2,32 +2,11 @@ const books = document.querySelector(".books");
 const overlay = document.querySelector(".overlay");
 const newBtn = document.querySelector(".new");
 const addBtn = document.querySelector(".add-btn");
-const editBtn = document.querySelector(".edit-btn");
+const updateBtn = document.querySelector(".update-btn");
 const form = document.querySelector(".popup form");
 const inputFields = document.querySelectorAll(".popup input");
 
 let myLibrary = [];
-
-// myLibrary = [
-//    {
-//       title: "book324",
-//       author: "me",
-//       pages: 500,
-//       read: true,
-//    },
-//    {
-//       title: "book2",
-//       author: "you",
-//       pages: 5000,
-//       read: false,
-//    },
-//    {
-//       title: "book3",
-//       author: "someone",
-//       pages: 570,
-//       read: true,
-//    },
-// ];
 
 function addLocalStorage() {
    if (
@@ -40,7 +19,6 @@ function addLocalStorage() {
    }
 }
 addLocalStorage();
-// saveRender();
 
 function createBookElement(el, content, className) {
    const element = document.createElement(el);
@@ -60,15 +38,11 @@ function createReadElement(bookItem, book) {
 
    input.onchange = () => {
       if (input.checked) {
-         // bookItem.classList.remove("read-unchecked");
-         // bookItem.classList.add("read-checked");
          geekmark.classList.toggle("hidden");
 
          book.read = true;
          saveRender();
       } else {
-         // bookItem.classList.remove("read-checked");
-         // bookItem.classList.add("read-unchecked");
          geekmark.classList.toggle("hidden");
 
          book.read = false;
@@ -88,7 +62,7 @@ function createReadElement(bookItem, book) {
 
 function createBookItem(book, index) {
    const bookItem = document.createElement("div");
-   bookItem.setAttribute("id", book.id);
+   bookItem.setAttribute("id", index);
    bookItem.setAttribute("key", index);
    bookItem.setAttribute("class", "card book box");
    bookItem.append(
@@ -121,7 +95,7 @@ function createBookItem(book, index) {
       deleteBook(index);
    });
    edit.addEventListener("click", () => {
-      editBook(index);
+      editBook(book, index);
    });
 }
 
@@ -130,10 +104,9 @@ function deleteBook(index) {
    saveRender();
 }
 
-function editBook(index) {
+function editBook(book, index) {
    overlay.style.transform = "scale(1)";
    overlay.style.opacity = "1";
-   // console.log(myLibrary[index]);
    inputFields.forEach((inp) => {
       if (inp.name == "title") {
          inp.value = `${myLibrary[index].title}`;
@@ -145,6 +118,8 @@ function editBook(index) {
          inp.value = `${myLibrary[index].pages}`;
       }
    });
+   console.log(book);
+   form.id = book.id;
 }
 
 function renderBooks() {
@@ -163,7 +138,7 @@ function saveRender() {
 newBtn.addEventListener("click", () => {
    overlay.style.transform = "scale(1)";
    overlay.style.opacity = "1";
-   // inputFields.forEach((inp) => (inp.value = ""));
+   inputFields.forEach((inp) => (inp.value = ""));
 });
 addBtn.addEventListener("click", () => {
    overlay.style.transform = "translateY(100%)";
@@ -179,7 +154,7 @@ window.addEventListener("click", (e) => {
 
 window.onload = () => {
    if (books.innerHTML == "") {
-      console.log("empty no boos");
+      // console.log("empty no boos");
       books.innerText = "Add New Books ..!";
    }
 };
@@ -190,28 +165,21 @@ form.addEventListener("submit", makeObj);
 
 function makeObj(e) {
    e.preventDefault();
-   const myFormData = new FormData(e.target);
-   // https://stackabuse.com/convert-form-data-to-javascript-object/
-   // const formDataObj = Object.fromEntries(myFormData.entries())
-   let formDataObj = {};
-   myFormData.forEach((value, name) => (formDataObj[name] = value));
-   if (formDataObj.title == "") return;
-   if()
-   formDataObj = new Book(
-      formDataObj.title,
-      formDataObj.author,
-      formDataObj.pages,
-      formDataObj.id
-   );
-   let id = formDataObj.id;
-   formDataObj = myLibrary.filter((b) => b.id === id)[0];
-   addBookToLibrary(
-      formDataObj.title,
-      formDataObj.author,
-      formDataObj.pages,
-      formDataObj.id,
-      false
-   );
+   let submitter = e.submitter;
+   if (submitter.classList.contains("add-btn")) {
+      const myFormData = new FormData(e.target);
+      // https://stackabuse.com/convert-form-data-to-javascript-object/
+      // const formDataObj = Object.fromEntries(myFormData.entries())
+      let formDataObj = {};
+      myFormData.forEach((value, name) => (formDataObj[name] = value));
+      if (formDataObj.title == "") return;
+      addBookToLibrary(
+         formDataObj.title,
+         formDataObj.author,
+         formDataObj.pages,
+         false
+      );
+   }
 }
 
 class Book {
@@ -224,13 +192,38 @@ class Book {
    }
 }
 
-function addBookToLibrary(title, author, pages, read, id) {
-   myLibrary.push(new Book(title, author, pages, read, id));
+function addBookToLibrary(title, author, pages, read) {
+   myLibrary.push(new Book(title, author, pages, read));
    saveRender();
 }
 
-/// Edit books
-editBtn.addEventListener("click", () => {
+/// Update books info
+updateBtn.addEventListener("click", () => {
    overlay.style.transform = "translateY(100%)";
    overlay.style.opacity = "0";
+   updateBook();
 });
+
+function updateBook() {
+   let id = form.id;
+   let book = myLibrary.filter((x) => x.id == id)[0];
+   let newTitle;
+   let newAuthor;
+   let newPages;
+   inputFields.forEach((inp) => {
+      if (inp.name == "title") {
+         newTitle = inp.value;
+      }
+      if (inp.name == "author") {
+         newAuthor = inp.value;
+      }
+      if (inp.name == "pages") {
+         newPages = inp.value;
+      }
+   });
+   book.title = newTitle;
+   book.author = newAuthor;
+   book.pages = newPages;
+   console.log(myLibrary);
+   saveRender();
+}
